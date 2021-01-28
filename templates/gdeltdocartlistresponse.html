@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<h3>Search criteria: {{ keyword }} </h3>
+<h6>{{error_msg}}</h6>  
+<div class="news_content">
+    {% if ( keyword ) %}
+    {% for news in custom_news %}
+            <a href=" {{ news['url'] }} " target="_blank">
+                <h6 class="news_title">{{ news["title"] }}</h6>
+            </a>
+            {% if (news["dt"]["hours"] > 1) %}
+            <small class="news_time">{{ news["domain"] }} | {{ news["dt"]["hours"] }} hrs and {{ news["dt"]["minutes"] }} mins ago </small>
+            {% elif (news["dt"]["hours"] > 0) %}
+            <small class="news_time">{{ news["domain"] }} | {{ news["dt"]["hours"] }} hr and {{ news["dt"]["minutes"] }} mins ago </small>
+            {% else %}
+            <small class="news_time">{{ news["domain"] }} | {{ news["dt"]["minutes"] }} mins ago </small>
+            {% endif %}
+    {% endfor %}
+    {% endif %}
+</div>
+
+<script src="{{ url_for('static', filename='js/doc.js')}}"></script>
+
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+ <h2>The GDELT Thematic Word Cloud Dashboard API</h2>
+ <p> This is a live-updated word cloud of the top overall and top trending topics mentioned 
+     in coverage about a given country or administrative division. Updated every 15 minutes, 
+     the visualization tallies up all of the themes mentioned in coverage mentioning a given country 
+     over the last 2 hours and compiles a ranking of the top most-mentioned themes. 
+     It then compares those themes against the top themes for the preceding 2 hours 
+     to compile a list of the top "trending" topics that have increased the most. 
+     This allows us to display either the major topics defining a country's coverage or 
+     the topics that are rapidly rising to the top, capturing the constant ebb-and-flow of coverage 
+     over the course of a day and in reaction to major events.</p>
+
+ <p>We can also switch between all topics, functional actors (roles like "child," "woman," "burglar," "president" and so on), 
+     or a mixture of the two. This allows us to create word clouds that filter to the kinds of roles 
+     being mentioned with respect to a country, the topics and themes defining it, or the combined narrative environment.
+ </p>
+ <ul>
+    <li>
+        VAR=trendfncact.  This displays the functional actors that are trending upwards 
+        in the last 2 hours compared with the preceding 2 hours.
+    </li>
+    <li>
+        VAR=trendnofncact.  This displays the top topics trending upwards in the last 2 hours compared with the preceding 2 hours.
+    </li>
+    <li>
+        VAR=trendall.  This displays a combined list of the top functional actors and topics trending 
+        upwards in the last 2 hours compared with the preceding 2 hours.
+    </li>
+    <li>
+        VAR=topfncact.  This displays the top functional actors mentioned most often in the last 2 hours.        
+    </li>
+    <li>
+        VAR=topnofncact.  This displays the top topics mentioned most often in the last 2 hours.
+    </li>
+    <li>
+        VAR=topall.  This displays a combined list of the top functional actors and topics mentioned most often in the last 2 hours.
+    </li>
+ </ul>
+<br>
+<br>
+ 
+
+<form action="/wordclouddashboardapi" method="post">
+    <!-- Query -->
+    <div class="form-group row">
+		<label for="loc" class="col-2 col-form-label">LOCATION:</label>
+		<div class="col-5">
+          <input class="form-control" type="text" value="" id="loc" name="loc"> 
+          <a href="/static/data/LOOKUPCOUNTRIES.txt" target="_blank">Two-digit country code</a> or
+          <a href="/static/data/GEOLOOKUP-ADM1.txt" target="_blank">Four-digit ADM1 code</a>
+		</div>
+      </div>
+      <div class="form-group row">
+            <label for="var" class="col-2 col-form-label">VAR</label>
+            <div class="col-5">
+                <select class="form-control" value="" id="var" name="var">
+                    <option >trendfncact</option>
+                    <option >trendnofncact</option>
+                    <option>trendall</option>
+                    <option>topfncact</option>
+                    <option>topnofncact</option>
+                    <option>topall</option>
+                </select>
+            </div>
+          </div>
+    <div class="form-group row">
+        <label for="output" class="col-2 col-form-label">OUTPUT</label>
+        <div class="col-5">
+            <select class="form-control" value="" id="output" name="output">
+                <option >viz</option>
+                <option >csv</option>
+            </select>
+        </div>
+        </div>
+
+	  <br>
+	  <br>
+	  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+{% endblock %}

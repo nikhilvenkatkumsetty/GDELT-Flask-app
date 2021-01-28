@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+ <h2>GDELT Context API</h2>
+ <p>
+    The Context 2.0 API is functionally extremely similar to the DOC 2.0 API, 
+    with the exception that instead of searching documents, it searches individual 
+    sentences and instead of only returning the URL of matching results, 
+    it returns a brief snippet of text showing the context of the match, typically 
+    the sentence that matched the keyword and a portion of the sentence before and 
+    after to offer an understanding of the context of the match. This makes it 
+    possible to understand whether an article mentioning "Covid-19" and "pandemic" 
+    together for example, is a casual reference to the outbreak or a clinical 
+    update on the pandemic's spread.
+ </p>
+<br>
+<p> Instead of searching entire documents, this API requires that all search terms 
+    appear in the same sentence together. Thus, while the DOC 2.0 API can return 
+    articles that mention "Covid-19" in a sentence at the beginning of an article 
+    and "pandemic" at the end of the article, the Context 2.0 API requires that 
+    all keywords be contained in the same sentence together to ensure maximal 
+    relevancy.
+</p>
+<br>
+<p>
+        The field of information science incorporates many areas of research 
+        related to information relevancy. We envision powerful new kinds of 
+        relevancy rankings that can use this additional contextual information 
+        together with machine learning approaches like neural or classical language 
+        understanding models to find the most relevant articles in response 
+        to a user's query. Using this additional contextual information, 
+        we expect relevancy filters that can actually model the response snippets 
+        and use them to semantically answer a user's question and route them to 
+        the most comprehensive and detailed articles supporting those answers, 
+        as well as identify contested narratives in which there are fundamentally 
+        opposing answers captured in the global news media. 
+</p>
+ 
+
+<form action="/gdeltcontextapi" method="post">
+    <!-- Query -->
+    <div class="form-group row">
+		<label for="searchterm" class="col-2 col-form-label">Search term:</label>
+		<div class="col-5">
+          <input class="form-control" type="text" value="" id="searchterm" name="searchterm"> 
+		</div>
+      </div>
+	<div class="form-group row">
+		<label for="domain" class="col-2 col-form-label">domain:</label>
+		<div class="col-5">
+		  <input class="form-control" type="text" value="" id="domain" name="domain"> 
+		</div>
+      </div>
+      <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="isquote" name="isquote" checked="1">
+            <label class="form-check-label" for="isquote">
+              ISQUOTE
+            </label>
+          </div>
+
+	  <div class="form-group row">
+            <label for="format" class="col-2 col-form-label">FORMAT</label>
+            <div class="col-5">
+                <select class="form-control" value="" id="format" name="format">
+                    <option >csv</option>
+                    <option>rss</option>
+                    <option selected>json</option>
+                    <option>jsonp</option>
+                    <option>jsonfeed</option>
+                </select>
+            </div>
+          </div>
+
+	  <div class="form-group row">
+		<label for="timespan" class="col-2 col-form-label">TIMESPAN</label>
+		<div class="col-5">
+		  <input class="form-control" type="text" value="" id="timespan" name="timespan">
+		</div>
+	  </div>
+
+	  <!-- STARTDATETIME/ENDDATETIME-->	  
+	  <div class="form-group row">
+            <label for="startdatetime" class="col-2 col-form-label">START DATE</label>
+            <div class="col-5">
+              <input class="form-control" type="date" value="" id="startdatetime" name="startdatetime">
+            </div>
+          </div>
+          
+          <div class="form-group row">
+            <label for="enddatetime" class="col-2 col-form-label">END DATE</label>
+            <div class="col-5">
+              <input class="form-control" type="date" value="" id="enddatetime" name="enddatetime">
+            </div>
+          </div>
+
+    <div class="form-group row">
+            <label for="maxrows" class="col-2 col-form-label">MAXROWS</label>
+            <div class="col-5">
+                <input class="form-control" type="text" value="" id="maxrows" name="maxrows">
+            </div>
+        </div>
+
+        <div class="form-group row">
+                <label for="searchlang" class="col-2 col-form-label">SEARCHLANG</label>
+                <div class="col-5">
+                    <input class="form-control" type="text" value="" id="searchlang" name="searchlang">
+                </div>
+            </div>
+
+        <div class="form-group row">
+                <label for="sort" class="col-2 col-form-label">SORT By</label>
+                <div class="col-5">
+                    <select class="form-control" value="" id="sort" name="sort">
+                        <option >datedesc</option>
+                        <option>dateasc</option>
+                    </select>
+                </div>
+            </div>
+
+
+
+	  <br>
+	  <br>
+	  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
+
+{% endblock %}

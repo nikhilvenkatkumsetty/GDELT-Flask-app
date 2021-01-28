@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<h3>Search criteria: {{ keyword }} </h3>
+<h6>{{ msg }}</h6>  
+<div class="sentiment-chart">
+    {% if ( keyword ) %}
+    <div class="chart-2">
+        <canvas id="line-chart" height="85"></canvas>
+    </div>
+    {% endif %}
+</div>
+<script>
+    var line_title = "{{ line_title }}"
+    var labels_line = [{% for item in line_labels %}
+                    "{{item}}",
+                    {% endfor %}]
+    var data_line =  [{% for item in line_values %}
+                    "{{item}}",
+                    {% endfor %}]
+    
+</script>
+<script src="{{ url_for('static', filename='js/news.js')}}"></script>
+{% endblock %}

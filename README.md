@@ -1,1 +1,1 @@
-# GDELT-Flask-App
+# GDELT-Flask-app

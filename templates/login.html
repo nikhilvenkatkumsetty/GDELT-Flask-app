@@ -1,0 +1,28 @@
+<!-- HTTP Methods
+GET
+GET is the most commonly used HTTP method and it is typically used to retrieve information from a web server.
+
+POST
+POST is commonly used to send information to web server. It is more often used when uploading a file, getting form data and sending sensitive data. POST is a secure way to send data to a web server.
+
+Creating a Form
+-->
+
+{% extends "base.html" %}
+{% block title %}Login Page{% endblock %}
+
+{% block content %}
+<form action="#" method="post">
+	<p>Name:</p>
+	<p><input type="text" name="nm" /></p>
+	<p><input type="submit" value="submit"/></p>
+</form>
+{% endblock %}
+
+<!--
+    We've specified the method of the form to be post. Which means that when the form is submitted we will POST data to the web server in the form of a request.
+
+Note the name of the text input field, we will use this to get it's value from our python code.
+
+-->
+

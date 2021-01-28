@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+ <h2>GDELT Global Knowledge Graph (GKG) 2.0 API</h2>
+ <p>A tool to generate GeoJSON files from <a href="https://blog.gdeltproject.org/gdelt-2-0-our-global-world-in-realtime/">
+    GDELT Global Knowledge Graph (GKG) 2.0</a>! Using this API, 
+    we can create live maps, updated every hour, of any of GDELT's 
+thousands of themes, of a particular person or organisation, of a 
+particular news outlet, of a particular language, or any combination.</p>
+
+<p> GCAMVAR. If you have enabled "tone" as one of OUTPUTFIELDS, by default it will return the standard GDELT Tone score, 
+    which is a rough approximation of the "positive"/"negative" sentiment of document that is reasonably robust 
+    across the languages that GDELT monitors.  However, to explore more complex emotional landscapes 
+    through a geographic lens, you can chose from the entire library of thousands of emotions assessed 
+    by the 24 tonal packages used by <a href="https://blog.gdeltproject.org/introducing-the-global-content-analysis-measures-gcam/" target="_blank">GDELT GCAM</a>.  Just make sure to include "tone" in the OUTPUTFIELDS list, 
+    find an emotional dimension of interest from 
+    the <a href="/static/data/LOOKUP-GKGTHEMES.txt" target="_blank">GCAM Master Codebook</a> and specify the Variable name here.  
+    For example, to use LIWC's "Anxiety" score (variable "c5.33"), specify "GCAMVAR=c5.33".  
+    To use RID's "EMOTIONS/AGGRESSION" score (variable "c8.2"), specify "GCAMVAR=c8.2".  
+    Since GCAM scores are recorded natively in GKG as word counts, they are automatically divided by 
+    the total number of words in the document to generate a density score suitable for mapping.</p>
+ 
+
+<form action="/gdeltgkggeojsonapi" method="post">
+    <!-- Query -->
+    <div class="form-group row">
+		<label for="searchterm" class="col-2 col-form-label">Search term:</label>
+		<div class="col-5">
+          <input class="form-control" type="text" value="" id="searchterm" name="searchterm"> 
+          <a href="/static/data/LOOKUP-GKGTHEMES.txt" target="_blank">GDELT Theme or person or organisation name</a>
+		</div>
+      </div>
+	<div class="form-group row">
+		<label for="domain" class="col-2 col-form-label">domain:</label>
+		<div class="col-5">
+		  <input class="form-control" type="text" value="" id="domain" name="domain"> 
+		</div>
+      </div>
+      <div class="form-group row">
+		<label for="lang" class="col-2 col-form-label">Language:</label>
+		<div class="col-5">
+      <input class="form-control" type="text" value="" id="lang" name="lang" placeholder="Type in a language name or a language code"> 
+      <a href="/static/data/ISO-639-2_8859-1.txt" target="_blank">Three-character ISO639-2 language code</a>
+		</div>
+      </div>
+      <div class="form-group row">
+		<label for="geoname" class="col-2 col-form-label">Geoname:</label>
+		<div class="col-5">
+		  <input class="form-control" type="text" value="" id="geoname" name="geoname"> 
+		</div>
+      </div>
+
+	  <div class="form-group row">
+		<label for="timespan" class="col-2 col-form-label">TIMESPAN</label>
+		<div class="col-5">
+		  <input class="form-control" type="text" value="" id="timespan" name="timespan">
+		</div>
+	  </div>
+
+	  <!-- OUTPUTTYPE -->
+	  <div class="form-group row">
+		<label for="outputtype" class="col-2 col-form-label">OUTPUTTYPE</label>
+		<div class="col-5">
+			<select class="form-control" value="" id="outputtype" name="outputtype">
+				<option>1</option>
+				<option>2</option>
+			</select>
+		</div>
+	  </div>
+
+	  <!-- OUTPUTFIELDS -->
+      <div class="form-group row">
+        <label for="outputfields" class="col-2 col-form-label">OUTPUTFIELDS</label>
+        <div class="col-5">
+            <select multiple class="form-control" id="outputfields" name="outputfields">
+            <option>name</option>
+            <option>geores</option>
+            <option>url</option>
+            <option>domain</option>
+            <option>lang</option>
+            <option>themes</option>
+            <option>tone</option>
+            <option>wordcount</option>
+            </select>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="gcamvar" class="col-2 col-form-label">GCAMVAR</label>
+        <div class="col-5">
+            <input class="form-control" type="text" value="" id="gcamvar" name="gcamvar"><a href="/static/data/GCAM-MASTER-CODEBOOK.txt" target="_blank">GCAM Master Codebook</a>
+        </div>
+    </div>
+
+    <div class="form-group row">
+            <label for="maxrows" class="col-2 col-form-label">MAXROWS</label>
+            <div class="col-5">
+                <input class="form-control" type="text" value="" id="maxrows" name="maxrows">
+            </div>
+        </div>
+
+
+
+	  <br>
+	  <br>
+	  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
+
+{% endblock %}

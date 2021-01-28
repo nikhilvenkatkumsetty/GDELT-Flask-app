@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.3/dist/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+</head>
+<body> 
+    <div class="data_content">
+        {% for data in labels_bar %}
+            <p class="data">{{ data }}</p>
+        {% endfor %}
+    </div>   
+    <canvas id="tone-chart" width="1500" height="450"></canvas>
+</body>
+<script>
+var labels_bar = [{% for item in labels %}
+                   "{{item}}",
+                  {% endfor %}]
+var data_bar = [{% for item in values %}
+                {{item}},
+            {% endfor %}]
+</script>
+<script src="{{ url_for('static', filename='js/gdelt_tone.js')}}"></script>
+</html>
+{% endblock %}

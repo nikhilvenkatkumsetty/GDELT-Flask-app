@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+ <h2>The GDELT Stability Dashboard API: Stability Timeline</h2>
+ <p>
+    A live visualization 15 minute updates and offer a choice of a basic synthetic 
+    "instability" measure or average tone at the national and ADM1 levels, displayed as either a 15 minute timeline over the last 7 days or a day-level view over the last 180 days.
+ </p>
+ <ul>
+    <li>VAR=instability.  This display a simple synthetic "instability" measure 
+        for a country offering a very basic, but insightful, view of the current 
+        level of conflict and instability involving it.  Currently it is calculated 
+        by summing the total number of QuadClass=MaterialConflict and EventRootCode=14(Protest) 
+        events together and dividing by the total number of all events worldwide monitored 
+        by GDELT in the same time period.  This yields a normalized view of instability.
+    </li>
+    <li>VAR=conflict.  Same as above, but only includes QuadClass=MaterialConflict, ignoring protest events.
+        </li>
+    <li>VAR=protest.  Same as above, but only includes EventRootCode=14, assessing only protest activity, 
+        but excluding all other kinds of conflict.
+    </li>
+    <li>VAR=tone.  Average Standard GDELT Tone of all articles mentioning the location at least twice in the article 
+        within the given timeframe.  This uses a very basic filter of requiring that an article mention 
+        the location at least twice anywhere in the article body, and assesses tone at the article level.  
+        Currently only the Standard GDELT Tone emotion is available, but in the future we hope 
+        to integrate the entire array of GCAM emotions.  This variable can be especially insightful 
+        to spotting deteriorating situations where coverage of a country or area is turning 
+        increasingly negative, even if physical unrest has ceased or not yet begun.
+    <li>VAR=artvolnorm.  This tallies the total number of articles mentioning the location 
+        at least twice anywhere in the article, divided by the total number of articles monitored 
+        by GDELT in the given timeframe, offering a normalized view of attention being paid 
+        to the location regardless of any physical unrest or other activity occurring there.  
+        This variable offers a useful measure of changes in overall global "attention" being paid to a given location.
+    </li>
+ </ul>
+<br>
+<br>
+ 
+
+<form action="/stabilitydashboardapi" method="post">
+    <!-- Query -->
+    <div class="form-group row">
+		<label for="loc" class="col-2 col-form-label">LOCATION:</label>
+		<div class="col-5">
+          <input class="form-control" type="text" value="" id="loc" name="loc"> 
+          <a href="/static/data/LOOKUPCOUNTRIES.txt" target="_blank">Two-digit country code</a> or
+          <a href="/static/data/GEOLOOKUP-ADM1.txt" target="_blank">Four-digit ADM1 code</a>
+		</div>
+      </div>
+      <div class="form-group row">
+            <label for="var" class="col-2 col-form-label">VAR</label>
+            <div class="col-5">
+                <select class="form-control" value="" id="var" name="var">
+                    <option >instability</option>
+                    <option >conflict</option>
+                    <option>protest</option>
+                    <option>tone</option>
+                    <option>artvolnorm</option>
+                </select>
+            </div>
+          </div>
+    <div class="form-group row">
+        <label for="output" class="col-2 col-form-label">OUTPUT</label>
+        <div class="col-5">
+            <select class="form-control" value="" id="output" name="output">
+                <option >viz</option>
+                <option >csv</option>
+            </select>
+        </div>
+        </div>
+
+    <div class="form-group row">
+            <label for="timeres" class="col-2 col-form-label">Time resolution</label>
+            <div class="col-5">
+                <select class="form-control" value="" id="timeres" name="timeres">
+                    <option >15min</option>
+                    <option >day</option>
+                </select>
+            </div>
+            </div>
+
+	<div class="form-group row">
+		<label for="smooth" class="col-2 col-form-label">Window frame interval:</label>
+		<div class="col-5">
+		  <input class="form-control" type="text" value="" id="smooth" name="smooth"> ( 0-5 )
+		</div>
+      </div>
+    
+    <div class="form-group row">
+        <label for="numdays" class="col-2 col-form-label">NUMDAYS:</label>
+        <div class="col-5">
+            <input class="form-control" type="text" value="" id="numdays" name="numdays"> 
+            ( <= 7 for 15min; <=180 for daily)
+        </div>
+        </div>
+
+    <div class="form-group row">
+            <label for="mode" class="col-2 col-form-label">MODE</label>
+            <div class="col-5">
+                <select class="form-control" value="" id="mode" name="mode">
+                    <option >LOC</option>
+                    <option >multi</option>
+                </select>
+            </div>
+            </div>
+
+	  <div class="form-group row">
+		<label for="autocap" class="col-2 col-form-label">AUTOCAP</label>
+		<div class="col-5">
+		  <input class="form-control" type="text" value="" id="autocap" name="autocap">
+		</div>
+	  </div>
+
+	  <br>
+	  <br>
+	  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+{% endblock %}

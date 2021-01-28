@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/news.css') }}">
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/wordcloud.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+</head>
+<body>
+<figure class="highcharts-figure">
+  <div id="container"></div>
+  <p class="highcharts-description">
+    Word clouds are used to visualize how often each word in a
+    text occurs. This example uses an excerpt from the popular
+    "Lorem Ipsum" text. Words that appear often will appear
+    larger.
+  </p>
+</figure>
+<script>
+var text = JSON.parse('{{ words | tojson | safe}}');
+</script>
+<script src="{{ url_for('static', filename='js/wordcloud.js')}}"></script>
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,219 @@
+{% extends "base1.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TV Search</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous"> -->
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/tv.css') }}">
+    <!-- <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}"> -->
+    <!-- <script src='static/Chart.min.js'></script> -->
+    <script src="{{ url_for('static', filename='js/gdelt_station.js')}}"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/heatmap.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/boost-canvas.js"></script>
+    <script src="https://code.highcharts.com/modules/boost.js"></script>
+    <script src="https://code.highcharts.com/modules/wordcloud.js"></script>
+    <script src="https://code.highcharts.com/modules/streamgraph.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/annotations.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.3/dist/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
+    <style>
+        .multiselect {
+    width: 200px;
+  }
+  
+  .selectBox {
+    position: relative;
+  }
+  
+  .selectBox select {
+    width: 100%;
+    font-weight: bold;
+  }
+  
+  .overSelect {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
+  
+  #checkboxes {
+    display: none;
+    border: 1px #dadada solid;
+  }
+  
+  #checkboxes label {
+    display: block;
+  }
+  
+  #checkboxes label:hover {
+    background-color: #1e90ff;
+  }
+    </style>
+
+<body>
+    <div class="full-content">
+    <div class="row">
+            <div class="col-6">
+                <div>
+                    <form method="POST" class="input-area" style="width: 1400px;">
+                        <input type="text" for="searchterm" name="searchterm" placeholder="Search Your keyword Here" class="textInput form-control" style="width: 250px;">
+                        <div class="multiselect" style="padding-right: 20px; padding-left: 20px; height: 100px; padding-top: 10px;">
+                          <div class="selectBox" onclick="showCheckboxes()">
+                            <select>
+                              <option>Select a Station</option>
+                            </select>
+                            <div class="overSelect" style="height: 40px;"></div>
+                          </div>
+                          <div id="checkboxes" name="stations">
+                            <label for="one">
+                                <input type="checkbox" id="one" value="CNN"  name="stations"/>CNN (1/1/2010-Now)</label>
+                            <label for="two">
+                                <input type="checkbox" id="two" value="KNTV"  name="stations"/>NBC (7/15/2010-Now)</label>
+                            <label for="three">
+                                <input type="checkbox" id="three" value="MSNBC"  name="stations"/>MSNBC (1/1/2010-Now)</label>
+                            <label for="four">
+                                <input type="checkbox" id="four" value="FOXNEWS"  name="stations"/>Fox News (1/1/2010-Now)</label>
+                            <label for="five">
+                                <input type="checkbox" id="five" value="BBCNEWS"  name="stations"/>BBC News (1/1/2010-Now)</label> 
+                            <label for="six">
+                                <input type="checkbox" id="six" value="BLOOMBERG"  name="stations"/>BLOOMBERG</label>
+                            <label for="seven">
+                                <input type="checkbox" id="seven" value="ALJAZ"  name="stations"/>Al Jazeera</label>                                
+                          </div>
+                        </div>
+                        <div class="form-group row" style="width: 400px;">
+                            <label for="startdatetime" class="col-2 col-form-label" style="padding-top: 15px;">Startdate</label>
+                            <div class="col-5">
+                              <input class="form-control" type="date" value="" id="startdatetime" name="startdatetime" style="width: 250px; padding: 10px;">
+                            </div>
+                          </div>
+                          
+                          <div class="form-group row" style="width: 400px;">
+                            <label for="enddatetime" class="col-2 col-form-label" style="padding-top: 15px;">Enddate</label>
+                            <div class="col-5">
+                              <input class="form-control" type="date" value="" id="enddatetime" name="enddatetime"  style="width: 250px; padding: 10px;">
+                            </div>
+                          </div>
+                      <input style="height: 40px; width: 75px;" type="submit" value="Submit" class="btn btn-primary customBtn">
+                    </form>
+                    <script>
+                        var expanded = false;
+                        function showCheckboxes() {
+                            var checkboxes = document.getElementById("checkboxes");
+                            if (!expanded) {
+                                checkboxes.style.display = "block";
+                                expanded = true;
+                            } else {
+                                checkboxes.style.display = "none";
+                                expanded = false;
+                            }
+                        }
+                    </script>
+                </div>
+            </div> 
+        </div>
+    </div>
+    <div class="results">
+
+    {% if ( keyword ) %}
+    <div class="row">
+        <div class="col-6">
+            <div class="streamgraph">    
+                <figure class="highcharts-figure">
+                    <div id="container1"></div>
+                </figure>
+                <script>
+                var labels1 =  [{% for item in labels1 %}
+                                    "{{item}}",
+                                {% endfor %}]
+                var dataset1 = JSON.parse('{{ data1 | tojson | safe}}');
+                </script>
+                <script src="{{ url_for('static', filename='js/gdelt_stream.js')}}"></script>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="voltimeline">
+                <canvas id="line-chart"></canvas>
+                <script>
+                    var labels2 =  [{% for item in labels2 %}
+                                    "{{item}}",
+                                    {% endfor %}]
+                    var dataset2 = JSON.parse('{{ data2 | tojson | safe}}');
+                
+                </script>
+                 <script src="{{ url_for('static', filename='js/gdelt_tvline.js')}}"></script>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="stationschart" style="position: relative; padding:50px;">
+                <div class="data_content">
+                    {% for data in labels_bar %}
+                        <p class="data">{{ data }}</p>
+                    {% endfor %}
+                </div>   
+                <canvas id="tone-chart"></canvas>
+                <script>
+                    var labels_bar = [{% for item in labels %}
+                                        "{{item}}",
+                                        {% endfor %}]
+                    var data_bar = [{% for item in values %}
+                                        {{item}},
+                                        {% endfor %}]
+                </script>
+                <script src="{{ url_for('static', filename='js/gdelt_tone.js')}}"></script>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="wordcloud">
+                <figure class="highcharts-figure">
+                <div id="container2"></div>
+                </figure>
+                <script>
+                    var text = JSON.parse('{{ words | tojson | safe}}');
+                    var keyword = JSON.parse('{{ keyword | tojson | safe}}');
+                </script>
+                <script src="{{ url_for('static', filename='js/wordcloud.js')}}"></script>
+            </div>
+        </div>
+    </div>    
+    <div class="volumeheatmap">
+        <div id="container3"></div>
+        <pre id="csv" style="display: none;">{{df_csv}}</pre>
+        <script src="{{ url_for('static', filename='js/gdelt_heat.js')}}"></script>
+    </div>
+    
+    <div class="topclips" style="position: relative; padding:50px;">
+        <iframe src="{{ result }}" width="100%" height="800" frameborder="0" allowfullscreen></iframe>
+    </div>
+    {% endif %}
+    </div>
+   
+    <script>
+        var expanded = false;
+        function showCheckboxes() {
+        var checkboxes = document.getElementById("checkboxes");
+        if (!expanded) {
+            checkboxes.style.display = "block";
+            expanded = true;
+        } else {
+            checkboxes.style.display = "none";
+            expanded = false;
+         }
+        }
+    </script>
+
+</body>
+{% endblock %}

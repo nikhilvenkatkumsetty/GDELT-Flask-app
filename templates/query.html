@@ -1,0 +1,920 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Deep Search</title>
+  <meta charset="utf-8">
+  <meta name="author" content="My Open Source Team">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="A Web Interface to GDELT APIs" />
+  <meta property="og:description" content="A Web Interface to GDELT APIs" />
+  <meta property="og:site_name" content="My GDELT Project" />
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../static/css/selectize.bootstrap3.css">
+  <link rel="stylesheet" href="../static/css/custom.css">
+  <link rel="stylesheet" href="../static/css/daterangepicker.css">
+  <link rel="stylesheet" href="../static/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../static/css/all.css">
+  <script type="text/javascript" src="../static/js/jquery-3.5.1.min.js"></script>
+  <script type="text/javascript" src="../static/js/popper.min.js"></script>
+  <script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="../static/js/selectize.min.js"></script>
+  <script type="text/javascript" src="../static/js/moment.min.js"></script>
+  <script type="text/javascript" src="../static/js/daterangepicker.js"></script>
+  <script type="text/javascript" src="../static/js/d3.min.js"></script>
+  <script type="text/javascript" src="../static/js/init.js"></script>
+  <script type="text/javascript" src="../static/js/responsive.js"></script>
+  <script type="text/javascript" src="../static/js/main.js"></script>
+  <script type="text/javascript" src="../static/js/compare.js"></script>
+
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-113199736-1');
+  </script>
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+  <a class="navbar-brand" href="./" style="font-size: 1.5em;">&nbsp; Deep Search</a>
+  <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+    <span class="navbar-toggler-icon"></span>
+  </button> -->
+  <div style="position: absolute; right: 5px;">
+    <button class='helpbutton btn-link' type="button" data-target="#helpModal" data-toggle="modal" style="float: right; margin-right: 5px;"><i class="fa fa-info-circle glyphicon glyphicon-info-circle fa-lg" title="How to use this site"></i></button>
+    <button class='zoombutton btn-link' type="button" onclick="iframe_zoom(1)" style="float: right; margin-right: 5px; width: 30px"><i class="fa fa-search-plus glyphicon glyphicon-search-plus fa-lg" title="Increase font size of results pane"></i></button>
+    <button class='zoombutton btn-link' type="button" onclick="iframe_zoom(0)" style="float: right; margin-right: 5px; width: 30px"><i class="fa fa-search-minus glyphicon glyphicon-search-minus fa-lg" title="Reduce font size of results pane"></i></button>
+  </div>
+</nav>
+
+
+<div class="container-fluid" id="main_row">
+  <div class="row">
+
+    <div class="col-md-4 col-sm-12" id="side_panel">
+    GDELT Query Interface
+    <hr />
+      <!-- INPUT TABS -->
+      <div class="row tab col-12">
+        <button class="inputTabLinks col-4" onclick="manageInputTabs(event, 'tab_search')" id='searchTabInput'
+          title="SEARCH defines the terms and phrases within the content to filter by.">SEARCH</button>
+        <button class="inputTabLinks col-4" onclick="manageInputTabs(event, 'tab_image')" id='imageTabInput'
+          title="IMAGE let's you define query in terms of image tags.">IMAGE</button>
+        <button class="inputTabLinks col-4" onclick="manageInputTabs(event, 'tab_theme')" id='themeTabInput'
+          title="THEME: in development">THEME</button>
+      </div>
+
+      <!-- SEARCH TAB -->
+      <div id="tab_search" class="inputTab">
+        <div class="row col-12">
+          <div class="col-12">
+            <label for="query">Search&nbsp;terms</label>
+            <input class="col-12" type="text" value="" id="searchterm" name="searchterm" title='Multiple terms (AND) Separated by spaces; phrases in double quotes
+e.g. "cats and dogs"; OR in parentheses e.g. (cats OR dogs)'>
+          </div>
+          <div class="col-4 selectContainer" style="display: none;">
+            <label for="searchlang">Search&nbsp;language</label>
+            <select class="form-control pickerSelectClass dd_opt" id="sourcelang" name="sourcelang">
+                <option value="">All</option>
+	            <option value="eng">English</option>
+	<option value="afr">Afrikaans</option>
+	<option value="sqi">Albanian</option>
+	<option value="ara">Arabic</option>
+	<option value="hye">Armenian</option>
+	<option value="axe">Azerbaijani</option>
+	<option value="ben">Bengali</option>
+	<option value="bos">Bosnian</option>
+	<option value="bul">Bulgarian</option>
+	<option value="cat">Catalan</option>
+	<option value="zho">Chinese</option>
+	<option value="hrv">Croatian</option>
+	<option value="ces">Czech</option>
+	<option value="dan">Danish</option>
+	<option value="nld">Dutch</option>
+	<option value="est">Estonian</option>
+	<option value="fin">Finnish</option>
+	<option value="fra">French</option>
+	<option value="glg">Galician</option>
+	<option value="kat">Georgian</option>
+	<option value="deu">German</option>
+	<option value="ell">Greek</option>
+	<option value="guj">Gujarati</option>
+	<option value="heb">Hebrew</option>
+	<option value="hin">Hindi</option>
+	<option value="hun">Hungarian</option>
+	<option value="isl">Icelandic</option>
+	<option value="ind">Indonesian</option>
+	<option value="ita">Italian</option>
+	<option value="jpn">Japanese</option>
+	<option value="kan">Kannada</option>
+	<option value="kaz">Kazakh</option>
+	<option value="kor">Korean</option>
+	<option value="lav">Latvian</option>
+	<option value="lit">Lithuanian</option>
+	<option value="mkd">Macedonian</option>
+	<option value="msa">Malay</option>
+	<option value="mal">Malayalam</option>
+	<option value="mar">Marathi</option>
+	<option value="mon">Mongolian</option>
+	<option value="nep">Nepali</option>
+	<option value="nor">Norwegian</option>
+	<option value="nno">NorwegianNynorsk</option>
+	<option value="fas">Persian</option>
+	<option value="pol">Polish</option>
+	<option value="por">Portuguese</option>
+	<option value="pan">Punjabi</option>
+	<option value="ron">Romanian</option>
+	<option value="rus">Russian</option>
+	<option value="srp">Serbian</option>
+	<option value="sin">Sinhalese</option>
+	<option value="slk">Slovak</option>
+	<option value="slv">Slovenian</option>
+	<option value="som">Somali</option>
+	<option value="spa">Spanish</option>
+	<option value="swa">Swahili</option>
+	<option value="swe">Swedish</option>
+	<option value="tam">Tamil</option>
+	<option value="tel">Telugu</option>
+	<option value="tha">Thai</option>
+	<option value="bod">Tibetan</option>
+	<option value="tur">Turkish</option>
+	<option value="ukr">Ukrainian</option>
+	<option value="urd">Urdu</option>
+    <option value="vie">Vietnamese"</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- IMAGE TAB -->
+      <div id="tab_image" class="inputTab">
+        <div class="row col-12">
+          <div class="col-11">
+            <label for="imagetag">Image&nbsp;tags</label>
+            <select class="form-control pickerSelectClass dd_opt" type="text" id="imagetag"></select>
+          </div>
+          <div class="col-1">
+            <label id="imagetag_bool_lab" for="imagetag_bool" title="Multiple tags are OR by default
+Tick to override as AND">and</label>
+            <input id="imagetag_bool" name="imagetag_bool" type="checkbox" onchange="checkboxImageBool()" title="Multiple tags are OR by default
+Tick to override as AND"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- THEME TAB -->
+      <div id="tab_theme" class="inputTab">
+        <div class="row col-12">
+          <div class="col-11">
+            <label for="theme">Themes</label>
+            <select class="form-control pickerSelectClass dd_opt" type="text" id="theme"></select>
+          </div>
+          <div class="col-1">
+            <label id="theme_bool_lab" for="theme_bool" title="Multiple tags are OR by default
+Tick to override as AND">and</label>
+            <input id="theme_bool" name="theme_bool" type="checkbox" value="yes" onchange="checkboxThemeBool()" title="Multiple tags are OR by default
+Tick to override as AND"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- COUNTRIES & LANGUAGES -->
+      <div class="row col-12">
+        <div class="col-6 selectContainer">
+          <label for="sourcecountry">Source&nbsp;countries</label>
+          <select class="form-control pickerSelectClass dd_opt" id="sourcecountry" name="sourcecountry" title="xxx">
+            <option value="">All</option>
+              <option value="AF">Afghanistan</option>
+              <option value="AX">Akrotiri Sovereign Base Area</option>              
+              <option value="AL">Albania</option>
+              <option value="AG">Algeria</option>
+              <option value="AQ">American Samoa</option>
+              <option value="AN">Andorra</option>
+              <option value="AO">Angola</option>
+    <option value="AV">Anguilla</option>
+    <option value="AY">Antarctica</option>
+    <option value="AC">Antigua and Barbuda</option>
+    <option value="AR">Argentina</option>
+    <option value="AM">Armenia</option>
+    <option value="AA">Aruba</option>
+    <option value="AT">Ashmore and Cartier Islands</option>
+    <option value="AS">Australia</option>
+    <option value="AU">Austria</option>
+    <option value="AJ">Azerbaijan</option>
+    <option value="BF">Bahamas, The</option>
+    <option value="BA">Bahrain</option>
+    <option value="FQ">Baker Island</option>
+    <option value="BG">Bangladesh</option>
+    <option value="BB">Barbados</option>
+    <option value="BS">Bassas da India</option>
+    <option value="BO">Belarus</option>
+    <option value="BE">Belgium</option>
+    <option value="BH">Belize</option>
+    <option value="BN">Benin</option>
+    <option value="BD">Bermuda</option>
+    <option value="BT">Bhutan</option>
+    <option value="BL">Bolivia</option>
+    <option value="BK">Bosnia-Herzegovina</option>
+    <option value="BC">Botswana</option>
+    <option value="BV">Bouvet Island</option>
+    <option value="BR">Brazil</option>
+    <option value="IO">British Indian Ocean Territory</option>
+    <option value="VI">British Virgin Islands</option>
+    <option value="BX">Brunei</option>
+    <option value="BU">Bulgaria</option>
+    <option value="UV">Burkina Faso</option>
+    <option value="BY">Burundi</option>
+    <option value="CB">Cambodia</option>
+    <option value="CM">Cameroon</option>
+    <option value="CA">Canada</option>
+    <option value="CV">Cape Verde</option>
+    <option value="CJ">Cayman Islands</option>
+    <option value="CT">Central African Republic</option>
+    <option value="CD">Chad</option>
+    <option value="CI">Chile</option>
+    <option value="CH">China</option>
+    <option value="KT">Christmas Island</option>
+    <option value="IP">Clipperton Island</option>
+    <option value="CK">Cocos Keeling Islands</option>
+    <option value="CO">Colombia</option>
+    <option value="CN">Comoros</option>
+    <option value="CF">Congo</option>
+    <option value="CW">Cook Islands</option>
+    <option value="CR">Coral Sea Islands</option>
+    <option value="CS">Costa Rica</option>
+    <option value="IV">Cote dIvoire</option>
+    <option value="HR">Croatia</option>
+    <option value="CU">Cuba</option>
+    <option value="CY">Cyprus</option>
+    <option value="EZ">Czech Republic</option>
+    <option value="LO">Czechoslovakia</option>
+    <option value="CG">Democratic Republic of the Congo</option>
+    <option value="DA">Denmark</option>
+    <option value="DX">Dhekelia Sovereign Base Area</option>
+    <option value="DJ">Djibouti</option>
+    <option value="DO">Dominica</option>
+    <option value="DR">Dominican Republic</option>
+    <option value="TT">East Timor</option>
+    <option value="EC">Ecuador</option>
+    <option value="EG">Egypt</option>
+    <option value="ES">El Salvador</option>
+    <option value="GV">Equatorial Guinea</option>
+    <option value="EK">Equatorial Guinea</option>
+    <option value="ER">Eritrea</option>
+    <option value="EN">Estonia</option>
+    <option value="ET">Ethiopia</option>
+    <option value="PJ">Etorofu, Habomai, Kunashiri and Shikotan Islands</option>
+    <option value="EU">Europa Island</option>
+    <option value="FK">Falkland Islands Islas Malvinas</option>
+    <option value="FO">Faroe Islands</option>
+    <option value="FJ">Fiji</option>
+    <option value="FI">Finland</option>
+    <option value="FR">France</option>
+    <option value="FG">French Guiana</option>
+    <option value="FP">French Polynesia</option>
+    <option value="FS">French Southern and Antarctic Lands</option>
+    <option value="GB">Gabon</option>
+    <option value="GA">Gambia</option>
+    <option value="GZ">Gaza Strip</option>
+    <option value="GG">Georgia</option>
+    <option value="GM">Germany</option>
+    <option value="GH">Ghana</option>
+    <option value="GI">Gibraltar</option>
+    <option value="GO">Glorioso Islands</option>
+    <option value="GR">Greece</option>
+    <option value="GL">Greenland</option>
+    <option value="GJ">Grenada</option>
+    <option value="GP">Guadeloupe</option>
+    <option value="GQ">Guam</option>
+    <option value="GT">Guatemala</option>
+    <option value="GK">Guernsey</option>
+    <option value="PU">Guinea-Bissau</option>
+    <option value="GY">Guyana</option>
+    <option value="HA">Haiti</option>
+    <option value="HM">Heard Island and McDonald Islands</option>
+    <option value="HO">Honduras</option>
+    <option value="HK">Hong Kong</option>
+    <option value="HQ">Howland Island</option>
+    <option value="HU">Hungary</option>
+    <option value="IC">Iceland</option>
+    <option value="IN">India</option>
+    <option value="ID">Indonesia</option>
+    <option value="IR">Iran</option>
+    <option value="IZ">Iraq</option>
+    <option value="EI">Ireland</option>
+    <option value="IM">Isle of Man</option>
+    <option value="IS">Israel</option>
+    <option value="IT">Italy</option>
+    <option value="JM">Jamaica</option>
+    <option value="JN">Jan Mayen</option>
+    <option value="JA">Japan</option>
+    <option value="DQ">Jarvis Island</option>
+    <option value="JE">Jersey</option>
+    <option value="JQ">Johnston Atoll</option>
+    <option value="JO">Jordan</option>
+    <option value="JU">Juan de Nova Island</option>
+    <option value="KZ">Kazakhstan</option>
+    <option value="KE">Kenya</option>
+    <option value="KQ">Kingman Reef</option>
+    <option value="KR">Kiribati</option>
+    <option value="KV">Kosovo</option>
+    <option value="KU">Kuwait</option>
+    <option value="KG">Kyrgyzstan</option>
+    <option value="LA">Laos</option>
+    <option value="LG">Latvia</option>
+    <option value="LE">Lebanon</option>
+    <option value="LT">Lesotho</option>
+    <option value="LI">Liberia</option>
+    <option value="LY">Libya</option>
+    <option value="LS">Liechtenstein</option>
+    <option value="LH">Lithuania</option>
+    <option value="LU">Luxembourg</option>
+    <option value="MC">Macau</option>
+    <option value="MK">Macedonia</option>
+    <option value="MA">Madagascar</option>
+    <option value="MI">Malawi</option>
+    <option value="MY">Malaysia</option>
+    <option value="MV">Maldives</option>
+    <option value="ML">Mali</option>
+    <option value="MT">Malta</option>
+    <option value="RM">Marshall Islands</option>
+    <option value="MB">Martinique</option>
+    <option value="MR">Mauritania</option>
+    <option value="MP">Mauritius</option>
+    <option value="MF">Mayotte</option>
+    <option value="MX">Mexico</option>
+    <option value="FM">Micronesia</option>
+    <option value="MQ">Midway Islands</option>
+    <option value="MD">Moldova</option>
+    <option value="MN">Monaco</option>
+    <option value="MG">Mongolia</option>
+    <option value="MJ">Montenegro</option>
+    <option value="MH">Montserrat</option>
+    <option value="MO">Morocco</option>
+    <option value="MZ">Mozambique</option>
+    <option value="BM">Myanmar</option>
+    <option value="WA">Namibia</option>
+    <option value="NR">Nauru</option>
+    <option value="BQ">Navassa Island</option>
+    <option value="NP">Nepal</option>
+    <option value="NL">Netherlands</option>
+    <option value="NT">Netherlands Antilles</option>
+    <option value="NC">New Caledonia</option>
+    <option value="NZ">New Zealand</option>
+    <option value="NU">Nicaragua</option>
+    <option value="NG">Niger</option>
+    <option value="NI">Nigeria</option>
+    <option value="NE">Niue</option>
+    <option value="NM">No Mans Land</option>
+    <option value="NF">Norfolk Island</option>
+    <option value="KN">North Korea</option>
+    <option value="CQ">Northern Mariana Islands</option>
+    <option value="NO">Norway</option>
+    <option value="OS">Oceans</option>
+    <option value="MU">Oman</option>
+    <option value="PK">Pakistan</option>
+    <option value="PS">Palau</option>
+    <option value="LQ">Palmyra Atoll</option>
+    <option value="PM">Panama</option>
+    <option value="PP">Papua New Guinea</option>
+    <option value="PF">Paracel Islands</option>
+    <option value="PA">Paraguay</option>
+    <option value="PE">Peru</option>
+    <option value="RP">Philippines</option>
+    <option value="PC">Pitcairn Islands</option>
+    <option value="PL">Poland</option>
+    <option value="PO">Portugal</option>
+    <option value="RQ">Puerto Rico</option>
+    <option value="QA">Qatar</option>
+    <option value="RE">Reunion</option>
+    <option value="RO">Romania</option>
+    <option value="RS">Russia</option>
+    <option value="RW">Rwanda</option>
+    <option value="SH">Saint Helena</option>
+    <option value="SC">Saint Kitts and Nevis</option>
+    <option value="ST">Saint Lucia</option>
+    <option value="RN">Saint Martin</option>
+    <option value="SB">Saint Pierre and Miquelon</option>
+    <option value="VC">Saint Vincent and the Grenadines</option>
+    <option value="TB">Saint-Barthelemy Island</option>
+    <option value="WS">Samoa</option>
+    <option value="SM">San Marino</option>
+    <option value="TP">Sao Tome and Principe</option>
+    <option value="SA">Saudi Arabia</option>
+    <option value="SG">Senegal</option>
+    <option value="RI">Serbia</option>
+    <option value="SE">Seychelles</option>
+    <option value="SL">Sierra Leone</option>
+    <option value="SN">Singapore</option>
+    <option value="SI">Slovenia</option>
+    <option value="BP">Solomon Islands</option>
+    <option value="SO">Somalia</option>
+    <option value="SF">South Africa</option>
+    <option value="SX">South Georgia and the South Sandwich Islands</option>
+    <option value="KS">South Korea</option>
+    <option value="OD">South Sudan</option>
+    <option value="SP">Spain</option>
+    <option value="PG">Spratly Islands</option>
+    <option value="CE">Sri Lanka</option>
+    <option value="SU">Sudan</option>
+    <option value="NS">Suriname</option>
+    <option value="SV">Svalbard</option>
+    <option value="WZ">Swaziland</option>
+    <option value="SW">Sweden</option>
+    <option value="SZ">Switzerland</option>
+    <option value="SY">Syria</option>
+    <option value="TW">Taiwan</option>
+    <option value="TI">Tajikistan</option>
+    <option value="TZ">Tanzania</option>
+    <option value="TH">Thailand</option>
+    <option value="TO">Togo</option>
+    <option value="TL">Tokelau</option>
+    <option value="TN">Tonga</option>
+    <option value="TD">Trinidad and Tobago</option>
+    <option value="TE">Tromelin Island</option>
+    <option value="TS">Tunisia</option>
+    <option value="TU">Turkey</option>
+    <option value="TX">Turkmenistan</option>
+    <option value="TK">Turks and Caicos Islands</option>
+    <option value="TV">Tuvalu</option>
+    <option value="UG">Uganda</option>
+    <option value="UP">Ukraine</option>
+    <option value="UF">Undersea Features</option>
+    <option value="UU">Undesignated Sovereignty</option>
+    <option value="AE">United Arab Emirates</option>
+    <option value="UK">United Kingdom</option>
+    <option value="US">United States</option>
+    <option value="UY">Uruguay</option>
+    <option value="UZ">Uzbekistan</option>
+    <option value="NH">Vanuatu</option>
+    <option value="VT">Vatican City</option>
+    <option value="VE">Venezuela</option>
+    <option value="VM">Vietnam, Democratic Republic of</option>
+    <option value="VQ">Virgin Islands</option>
+    <option value="WQ">Wake Island</option>
+    <option value="WF">Wallis and Futuna</option>
+    <option value="WE">West Bank</option>
+    <option value="WI">Western Sahara</option>
+    <option value="YM">Yemen</option>
+    <option value="ZA">Zambia</option>
+    <option value="ZI">Zimbabwe"</option>
+          </select>
+        </div>
+        <div class="col-6 selectContainer">
+          <label for="sourcelang">Source&nbsp;languages</label>
+          <select class="form-control pickerSelectClass dd_opt" id="sourcelang" name="sourcelang">
+            <option value=""></option>
+	<option value="eng">English</option>
+	<option value="afr">Afrikaans</option>
+	<option value="sqi">Albanian</option>
+	<option value="ara">Arabic</option>
+	<option value="hye">Armenian</option>
+	<option value="axe">Azerbaijani</option>
+	<option value="ben">Bengali</option>
+	<option value="bos">Bosnian</option>
+	<option value="bul">Bulgarian</option>
+	<option value="cat">Catalan</option>
+	<option value="zho">Chinese</option>
+	<option value="hrv">Croatian</option>
+	<option value="ces">Czech</option>
+	<option value="dan">Danish</option>
+	<option value="nld">Dutch</option>
+	<option value="est">Estonian</option>
+	<option value="fin">Finnish</option>
+	<option value="fra">French</option>
+	<option value="glg">Galician</option>
+	<option value="kat">Georgian</option>
+	<option value="deu">German</option>
+	<option value="ell">Greek</option>
+	<option value="guj">Gujarati</option>
+	<option value="heb">Hebrew</option>
+	<option value="hin">Hindi</option>
+	<option value="hun">Hungarian</option>
+	<option value="isl">Icelandic</option>
+	<option value="ind">Indonesian</option>
+	<option value="ita">Italian</option>
+	<option value="jpn">Japanese</option>
+	<option value="kan">Kannada</option>
+	<option value="kaz">Kazakh</option>
+	<option value="kor">Korean</option>
+	<option value="lav">Latvian</option>
+	<option value="lit">Lithuanian</option>
+	<option value="mkd">Macedonian</option>
+	<option value="msa">Malay</option>
+	<option value="mal">Malayalam</option>
+	<option value="mar">Marathi</option>
+	<option value="mon">Mongolian</option>
+	<option value="nep">Nepali</option>
+	<option value="nor">Norwegian</option>
+	<option value="nno">NorwegianNynorsk</option>
+	<option value="fas">Persian</option>
+	<option value="pol">Polish</option>
+	<option value="por">Portuguese</option>
+	<option value="pan">Punjabi</option>
+	<option value="ron">Romanian</option>
+	<option value="rus">Russian</option>
+	<option value="srp">Serbian</option>
+	<option value="sin">Sinhalese</option>
+	<option value="slk">Slovak</option>
+	<option value="slv">Slovenian</option>
+	<option value="som">Somali</option>
+	<option value="spa">Spanish</option>
+	<option value="swa">Swahili</option>
+	<option value="swe">Swedish</option>
+	<option value="tam">Tamil</option>
+	<option value="tel">Telugu</option>
+	<option value="tha">Thai</option>
+	<option value="bod">Tibetan</option>
+	<option value="tur">Turkish</option>
+	<option value="ukr">Ukrainian</option>
+	<option value="urd">Urdu</option>
+    <option value="vie">Vietnamese"</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- DOMAINS -->
+      <div class="row col-12">
+        <div class="col-9 selectContainer">
+          <label for="domain">Domains</label>
+          <!-- <select class="form-control pickerSelectClass dd_opt" id="domain"></select> -->
+          <input class="form-control pickerSelectClass dd_opt" type="text" id="domain" name="domain" value='' title='Multiple terms (AND) Separated by spaces; phrases in double quotes
+e.g. "cats and dogs"; OR in parentheses e.g. (cats OR dogs)'>
+        </div>
+        <!-- Exact domain checkbox -->
+        <div class="col-3">
+          <label class="domain_grp" id="domainis_lab" for="domainis" title="Tick to e.g. match 'un.org' but exclude 'news.un.org'">
+            <input class="domain_grp" id="domainis" name="domainis" type="checkbox" value="yes" onchange="checkboxDomain()"
+            title="Tick to e.g. match 'un.org' but exclude 'news.un.org'"/>Exclude subdomains?</label>
+        </div>
+      </div>
+
+      <!-- DATE/TIME -->
+      <div class="row col-12">
+        <div class="col-8x">
+          <label for="datetime">Date range</label>
+          <input id="datetime" type="text" name="daterange" value="09/30/2017 - 12/20/2017" class="col-12x" title="Search within a specific date window. 
+          This option works when 'Recent' is blank."/>
+        </div>
+        <!-- Recent timespan -->
+        <div class="col-2x">
+          <label id="timespanlab" for="timespan" >Recent</label>
+          <input id="timespan" class="col-12x" name="timespan" type='text' value=''
+            title='Specify recent period, e.g: "12h</option> "5d</option> "3w</option> "6m</option> "1y" for hours/days/weeks/months/year (1y max), or without a code letter for minutes, e.g. "30"'/></input>
+        </div>
+        <!-- Google translate -->
+        <div class="col-2">
+          <label id="trans_lab" for="trans" title="Use Google Translate addon to offer translation options to results">G.T.</label>
+          <input id="trans" name="trans" type="checkbox" value="yes" onchange="checkboxTrans()"
+            title="Translate atricle titles with Google Translate.
+This works with ART-LIST and ART-GALLERY modes"/>
+
+        </div>
+      </div>
+      <br />
+
+      <!-- OUTPUT TABS -->
+      <hr />
+      <div class="row tab col-12">
+        <button id="contentTabOutput" class="outputTabLinks col-3" onclick="manageOutputTabs(event, 'tab_content')"
+          title="The CONTENT tab provides ways to see the content.">CONTENT</button>
+        <button id="timelineTabOutput" class="outputTabLinks col-3" onclick="manageOutputTabs(event, 'tab_timeline')"
+          title="The TIMELINE tab provides time-based analytics.">TEMPORAL PATTERN</button>
+        <button id="geoTabOutput" class="outputTabLinks col-3" onclick="manageOutputTabs(event, 'tab_geo')"
+          title="With the GEO interface you can see where locations have
+been mentioned within content within the past 7 days.">LOCATIONAL PATTERN</button>
+        <button id="tvTabOutput" class="outputTabLinks col-3" onclick="manageOutputTabs(event, 'tab_tv')"
+          title="The TV tab provides television news analytics.">TV</button>
+      </div>
+
+      <!-- CONTENT TAB -->
+      <div id="tab_content" class="outputTab">
+        <div class="row col-12">
+          <div class="col-12">
+            <label for="contentmode">Visualisation&nbsp;options</label>
+            <select class="form-control pickerSelectClass col-12" id="mode" name="mode" value="ArtList">
+                <option value=""></option>
+                <option value="ArtList">Article List</option>
+                <option value="ArtGallery">Article Gallery</option>
+                <!-- image collage -->
+                <option value="WordCloudImageTags">Topic Visual Detection</option>
+                <!-- wordcloud image tags -->
+                <option value="ImageCollage">Word-cloud from images</option>
+                <!-- Tone chart -->
+                <option value="ToneChart">Mention Tone Distribution</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- DOC API OUTPUT OPTIONS - WE MOVE THIS SECTION BETWEEN DOC TABS-->
+        <div id="doc_results_options" class="row col-12">
+          <div id="maxrecordsdiv" class="col-4 selectContainer">
+            <label for="maxrecords">Results:&nbsp;<span id="maxrecordslab"></label>
+            <input type="range" min="1" max="250" value="75" class="slider col-12" id="maxrecords" title="Number of records to return (from 1-250). This is effective for ART-LIST and ART-GALLERY modes">
+          </div>
+          <div id="timelinesmoothdiv" class="col-3 selectContainer" style="display: none;">
+            <label for="timelinesmooth">Smooth: <span id="timelinesmoothlab"></label>
+            <input type="range" min="0" max="30" value="0" class="slider col-12" id="timelinesmooth" title="Line smoothing with rolling average">
+          </div>
+          <!-- <div class="col-3 selectContainer">
+            <label for="format">Format</label>
+            <select class="form-control pickerSelectClass dd_opt" id="format" class="col-12"></select>
+          </div> -->
+          <div id="sortdiv" class="col-5 selectContainer">
+            <label for="sort">Sort</label>
+            <select class="form-control pickerSelectClass dd_opt" id="sort" class="col-12">
+                <option values=""></option>
+                <option values="DateDesc">Date-descending</option>
+                <option values="DateAsc">Date-Ascending</option>
+            </select>
+          </div>
+
+          <!-- <div id="analysis_buttons_div" class="row col-6" style="display: none;">
+            <label id="analysis_buttons_lab" class="col-12 text-center" for="analysis_buttons">COMPARE: <span id="analysis_datacount">0</span><span id='data_lnk'></span></label>
+            <div id="analysis_buttons" class="row col-12">
+              <div class="col-4 selectContainer"><button id="add_data" title="Add data for current query to memory for comparison with others" type="button" onclick="add_layers()" data-toggle="modal" data-target="#compareAddModal" class="col-12 text-center">Add</button></div>
+              <div class="col-4 selectContainer"><button id="view_data" title="See how the saved datasets match up" onclick="action_analysis()" class="col-12 text-center">View</button></div>
+              <div class="col-2 selectContainer"><button id="clear_data" title="Clear data" onclick="clear_analysis()" class="col-12 text-center">X</button></div>
+              <div class="col-2 selectContainer"><button id="compare_modal" title="Guide to the COMPARE tool" type="button" data-toggle="modal" data-target="#compareInfoModal" class="col-12 text-center">i</button></div>
+            </div>
+          </div> -->
+        </div>
+      </div>
+
+      <!-- TIMELINE TAB -->
+      <div id="tab_timeline" class="outputTab">
+        <div class="row col-12">
+          <div class="col-12">
+            <label for="timelinemode">Temporal&nbsp;options</label>
+            <select class="form-control pickerSelectClass col-12" id="mode" name="mode" value="TimeLineVol">
+                <option value=""></option>
+                <option value="TimelineVol">volume</option>
+                <option value="TimelineTone">Sentiment</option>
+                <option value="TimelineLang">Language</option>
+                <option value="TiimelineSourceCountry">Country</option>
+                <!-- <option value="">Mention Tone Distribution</option> -->
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- GEO TAB -->
+      <div id="tab_geo" class="outputTab">
+
+        <div class="row col-12">
+          <div class="col-12">
+            <label for="geomode">Locational&nbsp;options</label>
+            <select class="form-control pickerSelectClass col-12" id="geomode" value="PointData">
+                <option value=""></option>
+                <option value="PointData">Point Data</option>
+                <option value="PointHeatmap">Point Heatmap</option>
+                <!-- <option value="PointAnimation">Point Animation</option> -->
+                <option value="Country">Point Country</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- <div class="row col-12">
+          <div class="col-4 selectContainer">
+            <label for="geoformat">Format</label>
+            <select class="form-control pickerSelectClass dd_opt" id="geoformat" class="col-12"></select>
+          </div>
+          <div class="col-2 selectContainer">
+            <label for="geotimespan" class="center-block2">Recent</label>
+            <input class="center-block2" type="text" id="geotimespan" value='1d' title='Timespan from 1-7 days in format "7d"'>
+          </div>
+          <div class="col-2 selectContainer">
+            <label for="geogeores" class="center-block2">GeoRes</label>
+            <input class="center-block2" type="text" id="geogeores" value='' title='GeoRes: geographical specificity filter:
+0 = no filter (default)
+1 = exclude country-level references
+2 = also exclude ADM1-level references (top sub-national region)'>
+          </div>
+          <div class="col-4 selectContainer">
+            <label for="geonear">Near</label>
+            <input class="col-12" type="text" id="geonear" value='' title='Returns all matches within a certain radius (bounding box) of a given point.
+You specify a particular latitude and longitude and distance in either miles
+(default) or kms (e.g. for 100km from Paris "48.85,2.35,100km")
+(Degrees need at least one decimal place - eg. "48.0")'>
+          </div>
+        </div> -->
+
+        <div class="row col-12">
+          <div class="col-4 selectContainer">
+            <label for="geolocationcc">Country</label>
+            <input class="col-12" type="text" id="geolocationcc" value='' title='Searches for a given word or phrase in the full formal name of the location - e.g. New York'>
+          </div>
+          <!-- <div class="col-4 selectContainer">
+            <label for="geolocationadm1">ADM1</label>
+            <select class="form-control pickerSelectClass dd_opt" id="geolocationadm1" class="col-12"></select>
+          </div> -->
+          <div class="col-4 selectContainer">
+            <label for="geolocation">Location</label>
+            <input class="col-12" type="text" id="geolocation" value='' title='Searches for a given word or phrase in the full
+formal name of the location - e.g. New York'>
+          </div>
+        </div>
+      </div>
+
+      <!-- TV TAB -->
+      <div id="tab_tv" class="outputTab">
+        <div class="row col-12">
+          <div class="col-12">
+            <label for="tvmode">TV&nbsp;options</label>
+            <select class="form-control pickerSelectClass col-12" id="tvmode" value="TimelineVol"></select>
+          </div>
+        </div>
+        <div class="row col-12">
+          <div class="col-9">
+            <label for="network">Network</label>
+            <select class="form-control pickerSelectClass dd_opt col-12" type="text" id="network"></select>
+          </div>
+          <div class="col-3">
+            <label for="context">Context&nbsp;term(s)</label>
+            <input class="col-12" type="text" id="context" value='' title='Filter results further by specifying additional filter keywords
+which must be matched in the same 15s clip as the positive
+"query" match or clip before or after it'>
+          </div>
+        </div>
+      </div>
+
+      <hr>
+      <div class="row col-12">
+        <a id="gdelt_api_call" class="col-11 inline-block" target='_blank'></a>
+        <button type="button" class="col-1 inline-block btn-link" onclick="copyApiCall()" style="border: none; padding: 1px; color:cyan;"><i id="copybutton" class="fa fa-clipboard glyphicon glyphicon-clipboard fa-sm" title="Copy URL link"></i></button>
+      </div>
+
+    </div>  <!-- END SIDE-PANEL DIV -->
+
+    <!-- MAIN PANEL DIV -->
+    <div id="main_panel" class="col-md-8 col-sm-12 intrinsic-container intrinsic-container-16x9">
+
+      <div id='main_panel_title_row' class="row col-12">
+          <h3 style='position: in-line; float:left; padding-top:10px; padding-left: 10px;'>
+            <i class="fa fa-search glyphicon glyphicon-search fa-sm" style='position: in-line; float:left; padding: 10px; padding-left: 2px; padding-top: 15px;'></i>
+            <div id="iframe_title"></div>
+          </h3>
+
+      </div>
+      <div id='iframe_container' class="row col-12">
+        <iframe id="gdelt_iframe" width=100% src="" frameBorder="0"></iframe>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- HELP MODAL -->
+<div class="modal fade" id="helpModal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">How to use GDELT</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <p>This site has no affiliated with GDELT (<a href="https://gdeltproject.org" target="_BLANK">gdeltproject.org</a>), but does provide an interface to some of its data services - specifically its <a href="https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/" target="_BLANK">DOC</a>, <a href="https://blog.gdeltproject.org/gdelt-geo-2-0-api-debuts/" target="_BLANK">GEO</a> and <a href="https://blog.gdeltproject.org/gdelt-2-0-television-api-debuts/" target="_BLANK">Television</a> APIs. These services should not be confused with the <i>GDELT Events</i> databases to which "GDELT" is most closely associated by some, although they are related. </p>
+        <p>Using this site you can do things like:</b></p>
+        <ul>
+          <li> search in English for global content in any or all languages on a particular topic </li>
+          <li> search for specific content or published in the past hour from eg. Japan, or in Japanese, or referencing a Japanese location </li>
+          <li> find content based on features and text in its imagery </li>
+          <li> investigate and compare media trends over time </li>
+        </ul>
+        <b> QUERY DEFINITION </b>
+        <ul>
+          <li> <b>Search term</b> - any work or phrase in English (GDELT matches these against English translations of non-English content). Phrases should be in "double quotes". Spaces outside quotes are interpreted as AND. Boolean is supported, so you can search for <a href='./#api=geo&query=(missile OR nuclear)&geolocationcc=KN&geomode=PointData&geotimespan=7d' target='_blank'>'(x OR y)'</a> or <a href='./#api=doc&query="World Cup" -football&sourcelang=eng&contentmode=ArtList&maxrecords=75&timespan=1m' target='_blank'>'x -y' (NOT y)</a>.  There are also two powerful special search functions that can help to find the right content:
+            <ul>
+              <li> <b>near:</b> articles that feature two words within <i>n</i> words of each other - e.g. <b>near5:"climate emergency"</b> <a href='./#api=doc&query=near5:"climate emergency"&timelinemode=TimelineVol&timelinesmooth=0&timespan=1w' target="_BLANK">(example)</a> </li>
+              <li> <b>repeat:</b> articles that feature a word a minimum of <i>n</i> times (max 5) - e.g. <b>repeat3:"climate"</b> <a href='./#api=doc&query=repeat3:"climate"&contentmode=ArtList&maxrecords=75&timespan=1w' target="_BLANK">(example)</a> </li>
+            </ul>
+          </li>
+          <li> <b>Image tags</b> - images within content are processed using deep learning algorithms to identify features and text they contain. Search for available tags in the dialogue box (<a href='./#api=doc&query=&imagetag=military%20vehicle,tank,self%20propelled%20artillery&sourcecountry=UP&contentmode=ImageCollageInfo&maxrecords=75&timespan=1w' target='_blank'>example</a>)</li>
+          <li> <b>Themes</b> - content is interpreted and linked to 'themes' reflecting its subject matter, which you can search by. Themes are based on GDELT's <a href="https://blog.gdeltproject.org/gdelt-global-knowledge-graph/" target="_BLANK">Global Knowledge Graph</a> (GKG). </li>
+          <li> <b>Source countries</b> - countries of content origin. Choose up to ~7 - current implementation interprets these as (tag1 OR tag2) </li>
+          <li> <b>Source languages</b> - languages of the content. Choose up to ~7 - currently interpreted as (theme1 OR theme2) </li>
+          <li> <b>Domain</b> - define web domain of content - e.g. 'bbc.co.uk' or top-level domain '.gov' (US government content). Currently supports up to 5 domains, or 7 with _Exclude subdomains_ checked.</li>
+          <li> <b>Date range</b> - define any window for content dated since 1 January 2017. 'Recent' field must be clear to use this. CONTENT view will only return matching articles published in the most recent 3 months of your specified window.</li>
+          <li> <b>Recent</b> - set to return most recent content in terms of minutes/hours/days/months/year. Use format '12h', '5d', '3w', '6m', '1y' (1y max) or just a number for minutes. </li>
+          <li> <b>GT</b> - A Google Translate widget to translate articles headlines in ART LIST and ART GALLERY modes. To use scroll to the bottom of the results window and select the target language. Translations of abbreviated headlines aren't always very good, but should still give an idea of topic. </li>
+        </ul>
+        <b> ANALYSIS MODES </b>
+        <ul>
+          <li> <b>CONTENT</b> - This tab offers the various modes to access the content matching the search (<a href='./#api=doc&query=Essequibo Venezuela (border OR claim OR territory OR territorial)&sourcecountry=GY&contentmode=ArtList&maxrecords=75&timespan=1y' target='_blank'>example1</a>  )</li>
+          <li> <b>TIMELINE</b> - This offers the modes available to view volumetric trends for the query over time (<a href='./#api=doc&query=(Essequibo%20OR%20Esequiba)&sourcecountry=VE,GY&timelinemode=TimelineSourceCountry&timelinesmooth=14&timespan=1y' target='_blank'>example1</a>, <a href='./#api=doc&query=(Essequibo%20OR%20Esequiba)&sourcecountry=-US&sourcelang=spa,eng&timelinemode=TimelineLang&timelinesmooth=14&timespan=1y' target='_blank'>example2</a>). </li>
+          <li> <b>GEO</b> - Geographical tools to investigate media published in the past 7 days. Some modes (e.g. default POINT DATA <a href='./#api=geo&query=(refugees%20OR%20migrants)%20(boat%20OR%20ship)&geolocationcc=AG,LY,TS,MO,LE,EG&geomode=PointData&geotimespan=7d' target='_blank'>example</a>) report not the origins of content, but countries and place names that are referenced. Some of the modes are image-specific, and will only work for image tag searches. Others work only with search terms and not image tags. </li>
+          <li> <b>TV</b> - This explores GDELT's Television Explorer API, a collaboration with the Internet Archive to make searchable the "closed captioning" text streams accompanying TV news - i.e. the digitised speech that is broadcast - for selected networks.</li>
+        </ul>
+        <b> COMPARE TOOL </b>
+        <ul><li> This tool works by remembering the data for TIMELINE queries that you <i>Add</i>, and comparing them when you click <i>View</i>. <a href='#' onclick="javascript:$('#helpModal').modal('hide');$('#compare_modal').click();">See the guide</a>. </li></ul>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- COMPARE INFO MODAL -->
+<div class="modal fade" id="compareInfoModal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">The COMPARE tool</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <p>The tool is offered by this webpage, not GDELT. Take a moment to understand how it works so you get the results you want:</p>
+        <ul>
+          <li><p>Usage: 1) define a GDELT query to compare with another, 2) click 'Add' and give it a name, 3) repeat until you've added all the queries you want to compare, 4) click 'View'.</em>. See <a href="./#compare&cnn.com=https%3A%2F%2Fapi.gdeltproject.org%2Fapi%2Fv2%2Fdoc%2Fdoc%3Fquery%3DKorea%20nuclear%2520domain%3Acnn.com%26mode%3DTimelineVol%26timelinesmooth%3D5%26timespan%3D1y&foxnews.com=https%3A%2F%2Fapi.gdeltproject.org%2Fapi%2Fv2%2Fdoc%2Fdoc%3Fquery%3DKorea%20nuclear%2520domain%3Afoxnews.com%26mode%3DTimelineVol%26timelinesmooth%3D5%26timespan%3D1y" target="_blank">CNN/Fox News coverage example</a>.</a></p></li>
+          <li><p>GDELT 's timeline VOLUME modes report the <em>proportion of global media content that matches the query</em> (however the query is defined in terms of keywords/phrases, country/language filters, imagetags, etc). When a filter is added (such as source-country=France or language=French) the reported values still show proportion of <em>global</em> content.</p></li>
+          <li><p>By contrast, GDELT's timeline LANGUAGE mode reports the proportion of media <em>in that language</em> that matches the query. Likewise SOURCE COUNTRY mode reports the proportion of media originating <em>in that country</em> that matches the query.</p></li>
+          <li><p>When you use the <em>COMPARE</em> tool take care to add query layers defined with the appropriate timeline mode:</p>
+            <ul>
+              <li><p>If you want simple comparisons between countries of the same word/phrase (eg. 'food prices') you should just use the SOURCE COUNTRY mode and not the COMPARE tool (<a href="./#api=doc&query=food%20(price%20OR%20prices)&sourcecountry=IR,SY,IZ&timelinemode=TimelineSourceCountry&timelinesmooth=14&timespan=1y" target="_blank">example</a>). Likewise for simple language comparisons and LANGUAGE mode.</p></li>
+              <li><p>If you want to compare proportions of <em>global content</em> use COMPARE with individual queries defined with VOLUME mode (<a href="./#compare&Iran%20(food%20prices)=https%3A%2F%2Fapi.gdeltproject.org%2Fapi%2Fv2%2Fdoc%2Fdoc%3Fquery%3Dfood%20(price%20OR%20prices)%2520sourcecountry%3AIR%26mode%3DTimelineVol%26timelinesmooth%3D5%26timespan%3D1y&Iraq%20(food%20prices)=https%3A%2F%2Fapi.gdeltproject.org%2Fapi%2Fv2%2Fdoc%2Fdoc%3Fquery%3Dfood%20(price%20OR%20prices)%2520sourcecountry%3AIZ%26mode%3DTimelineVol%26timelinesmooth%3D5%26timespan%3D1y&Syria%20(food%20prices)=https%3A%2F%2Fapi.gdeltproject.org%2Fapi%2Fv2%2Fdoc%2Fdoc%3Fquery%3Dfood%20(price%20OR%20prices)%2520sourcecountry%3ASY%26mode%3DTimelineVol%26timelinesmooth%3D5%26timespan%3D1y" target="_blank">example</a>).</p></li>
+              <li><p>If you want to compare different things in different countries/languages (e.g. 'President X' in country A's media with 'Prime Minister Y' in country B's) you can use COMPARE (<a href="./#compare&Putin%20(Russian%20media)=https%3A%2F%2Fapi.gdeltproject.org%2Fapi%2Fv2%2Fdoc%2Fdoc%3Fquery%3DPutin%2520sourcecountry%3ARS%26mode%3DTimelineSourceCountry%26timelinesmooth%3D5%26timespan%3D1y&Trump%20(US%20media)=https%3A%2F%2Fapi.gdeltproject.org%2Fapi%2Fv2%2Fdoc%2Fdoc%3Fquery%3DTrump%2520sourcecountry%3AUS%26mode%3DTimelineSourceCountry%26timelinesmooth%3D5%26timespan%3D1y&Merkel%20(German%20media)=https%3A%2F%2Fapi.gdeltproject.org%2Fapi%2Fv2%2Fdoc%2Fdoc%3Fquery%3DMerkel%2520sourcecountry%3AGM%26mode%3DTimelineSourceCountry%26timelinesmooth%3D5%26timespan%3D1y&Erdogan%20(Turkish%20media)=https%3A%2F%2Fapi.gdeltproject.org%2Fapi%2Fv2%2Fdoc%2Fdoc%3Fquery%3D(Erdogan%20OR%20Erdo%C4%9Fan)%2520sourcecountry%3ATU%26mode%3DTimelineSourceCountry%26timelinesmooth%3D5%26timespan%3D1y&Macron%20(French%20media)=https%3A%2F%2Fapi.gdeltproject.org%2Fapi%2Fv2%2Fdoc%2Fdoc%3Fquery%3DMacron%2520sourcecountry%3AFR%26mode%3DTimelineSourceCountry%26timelinesmooth%3D5%26timespan%3D1y" target="_blank">see example</a>). Please note that COMPARE will only work properly with layers defined with SOURCE COUNTRY and LANGUAGE modes if a <em>single country or language filter</em> (respectively) is applied for each data layer.</p></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- COMPARE ADD MODAL -->
+<div class="modal fade" id="compareAddModal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">COMPARE: Add/Edit/Remove data</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <b> Here you can:</b>
+        <ul>
+          <li><b>ADD</b> the current GDELT timeline query as a new layer. Just give it a name below.</li>
+          <li><b>REPLACE</b> an existing layer with the current GDELT timeline query. Enter the same name as the existing layer, or use the shortcut link.</li>
+          <li><b>REMOVE</b> an existing layer. Enter its name prefixed with a hyphen '-', or use the shortcut link.</li>
+        </ul>
+        <span><b> Existing layers:</b> (<i>GDELT URL excerpt with layer specifications</i>)</span>
+        <ul id="compareLayers"></ul>
+        <label for="compareName"><b>Query name</b></label>
+        <input class="col-12" type="text" id="compareName" value='' title=''>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button id="compareAddModalOK" type="button" onclick="add_dataset($('#compareName').val())" class="btn btn-primary" data-dismiss="modal">OK</button>
+        <button type="button" onclick="$('#compareName').val('')" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/responsive.js')}}"></script>
+<script src="{{ url_for('static', filename='js/main.js')}}"></script>
+<script src="{{ url_for('static', filename='js/compare.js')}}"></script>
+<!-- <script type="text/javascript" src="../static/js/responsive.js"></script>
+<script type="text/javascript" src="../static/js/main.js"></script>
+<script type="text/javascript" src="../static/js/compare.js"></script> -->
+</body>
+</html>
+
+<!-- <iframe src="{{ result }}" width="100%" height="1200" frameborder="0" allowfullscreen></iframe> -->
+
+{% endblock %}

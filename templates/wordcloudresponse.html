@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<h3>The GDELT Thematic Word Cloud Dashboard </h3>
+<p>Query: {{ msg }}</p>
+<iframe src="{{ result }}" width="100%" height="600" frameborder="0" allowfullscreen></iframe>
+
+<p>The query URL:</p>
+<a href= "{{ result }}">{{ result }}</a>
+
+
+{% endblock %}

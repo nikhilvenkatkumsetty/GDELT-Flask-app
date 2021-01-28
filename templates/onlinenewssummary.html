@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<h2>The GDELT Summary Dashboard API</h2>
+<p>
+    GDELT Summary offers an interface to search the textual and visual 
+    narratives of the world news media by using simple keywords and 
+    dropdown filters to generate an instant news dashboard that summarizes 
+    global coverage of the topic of interest.
+</p>
+<!-- <iframe src="{{ result }}" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>-->
+<iframe src="{{ result }}" width="100%" height="1200" frameborder="0" allowfullscreen></iframe>
+
+
+<p>The query URL:</p>
+<a href= "{{ result }}">{{ result }}</a>
+
+
+{% endblock %}

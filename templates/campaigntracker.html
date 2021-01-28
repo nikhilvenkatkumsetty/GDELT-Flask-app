@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+ <h1>The GDELT Campaign Tracker Dashboard</h1>
+ <p>Here are just a few of the ways GDELT can be used to track how the media is covering
+     the candidates and the race as a whole. </p>
+
+ <ul>
+    <li>
+        <h2>Television Coverage</h2>
+    </li>
+    <p>
+        Televison news coverage is explored through GDELT Summary's Television Explorer(Television 2.0 API),
+        allowing keyword search the raw closed captioning of the monitored stations 
+        getting back a timeline of how much the keyword was mentioned, a comparison 
+        of how much each station covered it, a word cloud of common co-occurring 
+        words and a list of top clips matching the keyword. For example:
+        <ul>
+            <li>Candidate Attention. Plot how much attention a given candidate 
+                is getting across the major stations</li>
+            <li>Issue Attention. Plot how much attention a given issue is 
+                receiving and which stations are focusing on it the most.</li>
+            <li>
+                Candidate And Issue Wordclouds. Use the Top Clips snippets to compute 
+                the words most commonly occurring within 15s of each mention of the 
+                candidate's name. Generating a time series of daily, weekly or monthly 
+                wordclouds makes it possible to see how co-occurring words are changing 
+                over time. Comparing which words appear more or less on each station can 
+                also offer powerful insights, looking at the language favored by CNN vs 
+                Fox News
+            </li>
+            <li>
+                Candidate Dashboard. One of the most powerful ways to leverage the 
+                Television Explorer is simply to run a query for each candidate and 
+                graph them all together on a single timeline, ranking them by how much 
+                media attention each is getting. Comparing candidate mentions on the 
+                same set of stations over the same time period is the only time when 
+                it is safe to use non-normalized raw result counts. In this case it is 
+                safe to return the raw number of mentions of each candidate and then 
+                rank each candidate by the percent of all mentions of all the 
+                candidates that were of them (or the percentage of GOP or DEM 
+                candidates). Reporting each candidate as a percentage of candidate 
+                mentions, rather than of television mentions can help normalize for 
+                the decreased political coverage during holidays.
+
+            </li>
+        </ul>
+        See <a href="{{ url_for('onlinenewssummary') }}">Summary Dashboard</a></li>
+    </p>
+    <li>
+        <h2>Online News Coverage</h2>
+    </li>
+    <p>
+        GDELT Summary can also be used to report online media coverage (
+            Online News Summary) of each candidate or issue very similarly 
+            to the Television Explorer (it is a wrapper around the DOC 2.0 API). 
+    </p>
+    <p>See <a href="{{ url_for('onlinenewssummary') }}">Summary Dashboard</a></p>
+    <li>
+        <h2>Emotion Mining</h2>
+    </li>
+    <p>
+        Using GDELT Summary's fulltext search to identify online news coverage 
+        mentioning a given candidate, it is possible to explore the deeper emotional 
+        currents surrounding coverage of that candidate by taking the list of 
+        matching URLs and cross-referencing them against the GDELT Global Knowledge 
+        Graph (GKG) 2.0. Within the GKG record for each article, extract the 
+        Global Content Analysis Measures (GCAM) field, which records thousands of 
+        complex emotions and topics. GCAM records emotions at an article level, 
+        rather than entity level, but nevertheless allows some exceptionally 
+        powerful analyses of the emotional undercurrents of the 2020 race.
+    </p>
+    <p>See <a href="/gdeltgkggeojsonapi">GKG GeoJSON</a> and <a href="/gdeltcontextapi">Context Search</a></p>
+    <li>
+        <h2>Frontpage Coverage</h2>      
+    </li>
+    <p>
+        Every hour on the hour since March 2018, GDELT has crawled the 
+        homepages of around 50,000 news outlets worldwide and recorded all of 
+        their links and link text in the order they appear on the page. This makes 
+        it possible to see which stories are making it to the world's homepages and 
+        how often a candidate is frontpage material. More details, 
+        see <a href="https://blog.gdeltproject.org/announcing-gdelt-global-frontpage-graph-gfg/">here</a>
+
+    </p>
+ </ul>
+<br>
+<br>
+<p><a href="https://api.gdeltproject.org/api/v2/campaign2020/campaign2020?dm=rawdem&ts=3m">
+Campaign 2020 Media Dashboard</a></p>
+{% endblock %}

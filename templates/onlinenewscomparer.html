@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<h1>News Comparer</h1>
+<p>
+   News Comparer allows us to compare the results of multiple queries together
+   or compare coverage of up to four separate queries in a single live-updating dashboard, 
+   or and display the results of one query as a percent of another to answer questions 
+   like what percent of coverage of a given topic also mentions a specific subtopic or framing. 
+   All of GDELT Summary are simply wrapped around the GDELT TV 2.0, DOC 2.0 and GEO 2.0 APIs 
+   using their JSONP output formats. That is that, we can use GDELT Summary 
+   as a template to create our customized live-updating dashboard and visualizations! 
+</p>
+<iframe src="{{ result }}" width="100%" height="1200" frameborder="0" allowfullscreen></iframe>
+
+
+<p>The query URL:</p>
+<a href= "{{ result }}">{{ result }}</a>
+
+
+{% endblock %}
