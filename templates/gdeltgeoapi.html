@@ -62,7 +62,8 @@
 	  <div class="form-group row">
 		<label for="sourcecountry" class="col-1 col-form-label">Source country</label>
 		<div class="col-2">
-			<select class="form-control" id="sourcecountry" name="sourcecountry">
+			<select class="form-control" id="sourcecountry" name="sourcecountry" onfocus='this.size=10;' onblur='this.size=1;' 
+        onchange='this.size=1; this.blur();'>
 				<option value="">All</option>
               <option value="AF">Afghanistan</option>
               <option value="AX">Akrotiri Sovereign Base Area</option>              
@@ -347,7 +348,8 @@
 	  <div class="form-group row"style="padding-left:10px">
 		<label for="sourcelang" class="col-1 col-form-label">Source language:</label>
 		<div class="col-2">
-		  <select class="form-control" id="sourcelang" name="sourcelang">
+		  <select class="form-control" id="sourcelang" name="sourcelang" onfocus='this.size=10;' onblur='this.size=1;' 
+        onchange='this.size=1; this.blur();'>
 			<option selected value="eng">English</option>
 			<option value="afr">Afrikaans</option>
 			<option value="sqi">Albanian</option>
@@ -421,7 +423,8 @@
 	  <div class="form-group row" style="padding-left:10px">
 		<label for="theme" class="col-1 col-form-label">Theme</label>
 		<div class="col-2">
-		  <select class="form-control" type="text" value="" id="theme" name="theme">
+		  <select class="form-control" type="text" value="" id="theme" name="theme" onfocus='this.size=10;' onblur='this.size=1;' 
+        onchange='this.size=1; this.blur();'>
         <option value="">Select</option>
         <option value="AGRICULTURE">AGRICULTURE</option>
         <option value="CORRUPTION">CORRUPTION</option>
@@ -480,15 +483,6 @@
         <option value="PointHeatmap">Point Heatmap</option>
                 <!-- <option value="PointAnimation">Point Animation</option> -->
                 <!-- <option value="Country">Point Country</option> -->
-			</select>
-		</div>
-    </div>
-	  <!-- FORMAT -->
-	  <div class="form-group row" style="padding:10px">
-		<label for="formatselection" class="col-2 col-form-label">OUTPUT FORMAT</label>
-		<div class="col-1">
-			<select class="form-control" id="format" name="format">
-				<option selected value="html">Map</option>
 			</select>
 		</div>
     </div>
