@@ -44,12 +44,6 @@
 		</div>
 	  </div>
 	  <div class="form-group row">
-		<label for="domain" class="col-2 col-form-label">Domain</label>
-		<div class="col-2">
-		  <input class="form-control" type="text" value="" id="domain" name="domain"> 
-		</div>
-      </div>
-	  <div class="form-group row">
 		<label for="sourcecountry" class="col-2 col-form-label">Source country</label>
 		<div class="col-2">
 			<select class="form-control" id="sourcecountry" name="sourcecountry" onfocus='this.size=10;' onblur='this.size=1;' 
@@ -513,7 +507,7 @@
 <div class="column2">
 
 {% if mode=="TimelineVol" %}
-  <div class="linevol" style="position:absolute; width:65vw; height:90vh; right:10px; top:-800px; border-color:black;">
+  <div class="linevol" style="position:absolute; width:65vw; height:90vh; right:10px; top:-700px; border-color:black;">
     <canvas id="line-chart"></canvas>
   </div>
   <script>
@@ -527,7 +521,7 @@ var val1 =  [{% for item in v1 %}
 <script src="{{ url_for('static', filename='js/gdelt_linevol.js')}}"></script>
 
 {% elif mode=="TimelineTone"%}
-<div class="linetone" style="position:absolute; width:65vw; height:90vh; right:10px; top:-800px; border-color:black;">
+<div class="linetone" style="position:absolute; width:65vw; height:90vh; right:10px; top:-700px; border-color:black;">
   <canvas id="line-chart"></canvas>
 </div>
 <script>
@@ -541,7 +535,7 @@ var val1 =  [{% for item in v1 %}
 <script src="{{ url_for('static', filename='js/gdelttoneline.js')}}"></script>
 
 {% elif mode=="TimelineLang" %}
-<div class="linelang" style="position:absolute; width:65vw; height:90vh; right:10px; top:-800px; border-color:black;">
+<div class="linelang" style="position:absolute; width:65vw; height:90vh; right:10px; top:-700px; border-color:black;">
   <canvas id="line-chart"></canvas>
 </div>
 <script>
@@ -553,7 +547,7 @@ var val1 =  [{% for item in v1 %}
 <script src="{{ url_for('static', filename='js/gdelt_line.js')}}"></script>
 
 {% elif mode=="TimelineSourceCountry" %}
-<div class="country" style="position:absolute; width:65vw; height:90vh; right:10px; top:-800px; border-color:black;">
+<div class="country" style="position:absolute; width:65vw; height:90vh; right:10px; top:-700px; border-color:black;">
   <canvas id="line-chart"></canvas>
 </div>
 <script>

@@ -54,7 +54,7 @@ def content():#topic, sourcecountry, theme):
         #st = request.form.get("searchterm")
         #print("Search term: ", searchterm)
 
-        domain = request.form["domain"]
+        # domain = request.form["domain"]
         #print("Domain: ", domain)
 
         sourcecountry = request.form["sourcecountry"]
@@ -281,7 +281,7 @@ def temporal():#topic, sourcecountry, theme):
         #st = request.form.get("searchterm")
         #print("Search term: ", searchterm)
 
-        domain = request.form["domain"]
+        # domain = request.form["domain"]
         #print("Domain: ", domain)
 
         sourcecountry = request.form["sourcecountry"]
@@ -292,14 +292,15 @@ def temporal():#topic, sourcecountry, theme):
 
         theme = request.form.get("theme")
         # print("Theme: ", theme)
-
-        # tone = request.form.get("tone")
-        #print("Tone:", tone)
-
         startdatetime = request.form.get("startdatetime")
         #print("Start date: ", startdatetime)
 
         enddatetime = request.form.get("enddatetime")
+        #print("End date: ", enddatetime)
+
+        # tone = request.form.get("tone")
+        #print("Tone:", tone)
+
         #print("End date: ", enddatetime)
 
         # timespan = request.form.get("timespan")
@@ -357,8 +358,6 @@ def temporal():#topic, sourcecountry, theme):
         params['timespan'] = timespan
         msg = msg + "Timespan: " + timespan + ", "
     else:
-        # work out the date time format: YYYYMMDDHHMMSS
-        # from 2020-04-01T12:30
         startdatetime = startdatetime.replace("-", "")
         msg = msg + "Start date: " + startdatetime + ", "
         startdatetime = startdatetime+"000000"
@@ -782,6 +781,8 @@ def locational():
     locationcc = None
     sourcecountry = None 
     sourcelang = None
+    startdatetime = None
+    enddatetime = None
     theme = None
     tone = None
     timespan = None
@@ -795,7 +796,7 @@ def locational():
         searchterm = request.form["searchterm"]
         #print("Search term: ", searchterm)
 
-        domain = request.form["domain"]
+        # domain = request.form["domain"]
         #print("Domain: ", domain)
 
         location = request.form["location"]
@@ -803,6 +804,10 @@ def locational():
 
         # locationcc = request.form["locationcc"]
         #print("LocationCC: ", locationcc)
+        startdatetime = request.form.get("startdatetime")
+        #print("Start date: ", startdatetime)
+
+        enddatetime = request.form.get("enddatetime")
 
         sourcecountry = request.form["sourcecountry"]
         #print("Source country: ", sourcecountry)
@@ -813,12 +818,9 @@ def locational():
         theme = request.form.get("theme")
         #print("Theme: ", theme)
 
-        tone = request.form.get("tone")
+        # tone = request.form.get("tone")
         #print("Tone:", tone)
-
-        timespan = request.form.get("timespan")
-        if timespan == "":
-            timespan = "24h" # default
+        # default
         #print("Timespan: ", timespan)
 
         mode = request.form.get("mode")
@@ -841,14 +843,32 @@ def locational():
     
     params['query'] = query
     #print(query)
-    params['mode'] = mode #'timelinevolinfo'
-    msg = msg + "Mode: " + mode + ", "
+    if startdatetime == "" or enddatetime == "":
+        if timespan == "":
+            timespan = "1w"
+        params['timespan'] = timespan
+        msg = msg + "Timespan: " + timespan + ", "
+    else:
+        # work out the date time format: YYYYMMDDHHMMSS
+        # from 2020-04-01T12:30
+        startdatetime = startdatetime.replace("-", "")
+        msg = msg + "Start date: " + startdatetime + ", "
+        startdatetime = startdatetime+"000000"
+        #print(startdatetime)
+        params['startdatetime'] = startdatetime
+
+
+        enddatetime = enddatetime.replace("-", "")
+        msg = msg + "End date: " + enddatetime
+        enddatetime = enddatetime+"235959"
+        params['enddatetime'] = enddatetime
+
     if mode=='PointHeatmap':
         format = 'geojson'
     params['format'] = format
-    msg = msg + "Format: " + format + ", "
+    # msg = msg + "Format: " + format + ", "
     params['timespan'] = timespan
-    msg = msg + "timespan: " + timespan
+    # msg = msg + "timespan: " + timespan
 
     
     # =================================================
