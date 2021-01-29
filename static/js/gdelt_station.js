@@ -48,7 +48,7 @@ options : {
     },
     title: {
     display: true,
-    text: "Tone Chart"
+    text: "Station Chart"
 }     
 }
 });
