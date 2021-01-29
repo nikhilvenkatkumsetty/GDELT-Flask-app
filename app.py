@@ -622,7 +622,7 @@ def tv_feed():
     theurl4 = baseurl+"&"+format+"&"+startdatetime+"&"+enddatetime+"&"+search+stations+"&"+mode4+"&timelinesmooth=5"
     theurl5 = baseurl+"&"+format+"&"+startdatetime+"&"+enddatetime+"&"+search+stations+"&"+mode5
     theurl6 = baseurl+"&"+"format=html"+"&"+startdatetime+"&"+enddatetime+"&"+search+stations+"&"+mode6
-    print(theurl3)
+    # print(theurl3)
     # theurl
 
     df1 = pd.read_csv(theurl1)
@@ -634,7 +634,7 @@ def tv_feed():
 
     ##### streamgraph mode3#####
     series1 = options
-    print(df3)
+    # print(df3)
     labels1=list(df3.iloc[:,0])
     # print(labels)
     data1 = []

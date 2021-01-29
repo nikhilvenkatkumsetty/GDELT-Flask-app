@@ -1,9 +1,7 @@
 {% extends "base1.html" %}
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TV Search</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous"> -->
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/tv.css') }}">
@@ -77,15 +75,19 @@
                           </div>
                           <div id="checkboxes" name="stations">
                             <label for="one">
-                                <input type="checkbox" id="one" value="CNN"  name="stations"/>CNN (1/1/2010-Now)</label>
+                                <input type="checkbox" id="one" value="KGO"  name="stations"/>ABC (7/15/2010-Now)</label>
                             <label for="two">
-                                <input type="checkbox" id="two" value="KNTV"  name="stations"/>NBC (7/15/2010-Now)</label>
+                                <input type="checkbox" id="two" value="KPIX"  name="stations"/>CBS (7/15/2010-Now)</label>
                             <label for="three">
-                                <input type="checkbox" id="three" value="MSNBC"  name="stations"/>MSNBC (1/1/2010-Now)</label>
+                                <input type="checkbox" id="three" value="CNN"  name="stations"/>CNN (1/1/2010-Now)</label>
                             <label for="four">
-                                <input type="checkbox" id="four" value="FOXNEWS"  name="stations"/>Fox News (1/1/2010-Now)</label>
+                                <input type="checkbox" id="four" value="KNTV"  name="stations"/>NBC (7/15/2010-Now)</label>
                             <label for="five">
-                                <input type="checkbox" id="five" value="BBCNEWS"  name="stations"/>BBC News (1/1/2010-Now)</label>                              
+                                <input type="checkbox" id="five" value="MSNBC"  name="stations"/>MSNBC (1/1/2010-Now)</label>
+                            <label for="six">
+                                <input type="checkbox" id="six" value="FOXNEWS"  name="stations"/>Fox News (1/1/2010-Now)</label>
+                            <label for="seven">
+                                <input type="checkbox" id="seven" value="BBCNEWS"  name="stations"/>BBC News (1/1/2010-Now)</label>                             
                           </div>
                         </div>
                         <div class="form-group row" style="width: 400px;">
@@ -120,7 +122,7 @@
             </div> 
         </div>
     </div>
-    <div class="results">
+    <div class="results" style="padding-top: 150px;">
 
     {% if ( keyword ) %}
     <div class="row">
@@ -169,7 +171,7 @@
                                         {{item}},
                                         {% endfor %}]
                 </script>
-                <script src="{{ url_for('static', filename='js/gdelt_tone.js')}}"></script>
+                <script src="{{ url_for('static', filename='js/gdelt_station.js')}}"></script>
             </div>
         </div>
         <div class="col-6">
@@ -184,9 +186,9 @@
                 <script src="{{ url_for('static', filename='js/wordcloud.js')}}"></script>
             </div>
         </div>
-    </div>    
+    </div> 
     <div class="volumeheatmap">
-        <div id="container3"></div>
+        <div id="container"></div>
         <pre id="csv" style="display: none;">{{df_csv}}</pre>
         <script src="{{ url_for('static', filename='js/gdelt_heat.js')}}"></script>
     </div>
