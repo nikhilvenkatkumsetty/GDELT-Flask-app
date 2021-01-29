@@ -661,7 +661,7 @@ def tv_feed():
                        "#4ca2f9", "#a4e43f", "#d298e2", "#6119d0", ])
     for i in series2:
         temp = {
-            'label': i,
+            'name': i,
             'data': list(df1[i]),
             'borderColor': next(colorArray),
             'fill': False        
