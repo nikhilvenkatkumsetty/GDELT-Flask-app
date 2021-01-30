@@ -48,7 +48,7 @@ options : {
     },
     title: {
     display: true,
-    text: "Chart"
+    text: "Tone Chart"
 }     
 }
 });

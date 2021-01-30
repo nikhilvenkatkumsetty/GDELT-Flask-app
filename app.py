@@ -125,9 +125,7 @@ def content():#topic, sourcecountry, theme):
             params['trans'] = trans
     
     if startdatetime == "" or enddatetime == "":
-        if timespan == "":
-            timespan = "1w"
-        params['timespan'] = timespan
+        params['timespan'] = "1w"
         # msg = msg + "Timespan: " + timespan + ", "
     else:
         # work out the date time format: YYYYMMDDHHMMSS
@@ -162,11 +160,11 @@ def content():#topic, sourcecountry, theme):
 
     # if mode=="ToneChart":
     #     params['maxrecords'] = ""
-    
+    params['SORT'] = "DateDesc"
     response = requests.get(base_url, params=params)#, verify=False)    
     theurl = response.url
     #print(msg)
-    print(theurl)
+    # print(theurl)
     
     if mode=="ArtList":
         news, stat = grabError(theurl)
@@ -211,7 +209,7 @@ def content():#topic, sourcecountry, theme):
             words+=string
         words+="."
         words=" ".join(words.split())
-        # words=str(words)
+        words=str(words)
         # print(words)
         return render_template("content.html", result=theurl, words=words, title=title, msg=msg, mode=mode, keyword=searchterm)
 
@@ -353,8 +351,7 @@ def temporal():#topic, sourcecountry, theme):
             params['trans'] = trans
 
     if startdatetime == "" or enddatetime == "":
-        if timespan == "":
-            timespan = "1w"
+        timespan = "1w"
         params['timespan'] = timespan
         msg = msg + "Timespan: " + timespan + ", "
     else:
@@ -604,7 +601,7 @@ def tv_feed():
         stations+="%20)%20"
     if len(options)==1:
         stations+="%20station:"+options[0]+"%20"
-    print(stations)
+    # print(stations)
 
     mode1 = "mode=timelinevol"
     mode2 = "mode=timelinevolheatmap"
@@ -732,7 +729,7 @@ def tv_station():
     name=df1.columns[0]
     datalabels=list(df1[name])
     datavalues=list(df1['Value'])
-    print(datalabels)
+    # print(datalabels)
     return render_template("gdeltdoctonechart.html", labels=datalabels, values=datavalues)
 
 @app.route('/tvheatmap')
@@ -876,7 +873,7 @@ def locational():
     response = requests.get(geo_base_url, params=params)#, verify=False)
     # print(response)
     theurl = response.url
-    print(theurl)
+    # print(theurl)
     if mode=="PointHeatmap":
         heatmap(theurl)
         path="heatmap.html"
@@ -885,7 +882,7 @@ def locational():
     # Show the result to user
     if mode=="PointData":
         geo_url = get_geo_url(theurl)
-        print(geo_url)
+        # print(geo_url)
         return render_template("gdeltgeoapi.html", result=theurl, msg=msg, title=title, geo_url=geo_url, mode=mode)
     return render_template("gdeltgeoapi.html", result=theurl, msg=msg, title=title, mode=mode)
        
